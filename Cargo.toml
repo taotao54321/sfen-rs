@@ -1,0 +1,9 @@
+[package]
+name = "sfen"
+version = "0.1.0"
+authors = ["taotao54321 <taotao54321@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+itertools = "0.9"
+thiserror = "1.0"
