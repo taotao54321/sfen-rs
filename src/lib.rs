@@ -159,6 +159,16 @@ impl Board {
 pub struct Hand([u8; 7]);
 
 impl Hand {
+    const PTS: [PieceType; 7] = [
+        PieceType::Pawn,
+        PieceType::Lance,
+        PieceType::Knight,
+        PieceType::Silver,
+        PieceType::Bishop,
+        PieceType::Rook,
+        PieceType::Gold,
+    ];
+
     /// f(pt: PieceType) -> u8 を用いて初期化した持駒を返す。
     ///
     /// 合法性チェックは一切行わない。
@@ -166,18 +176,8 @@ impl Hand {
     where
         F: FnMut(PieceType) -> u8,
     {
-        const PTS: [PieceType; 7] = [
-            PieceType::Pawn,
-            PieceType::Lance,
-            PieceType::Knight,
-            PieceType::Silver,
-            PieceType::Bishop,
-            PieceType::Rook,
-            PieceType::Gold,
-        ];
-
         let mut counts = [0; 7];
-        for &pt in PTS.iter() {
+        for &pt in Self::PTS.iter() {
             counts[pt as usize] = f(pt);
         }
         Self(counts)
@@ -185,6 +185,10 @@ impl Hand {
 
     pub fn count(&self, pt: PieceType) -> u8 {
         self.0[pt as usize]
+    }
+
+    pub fn enumerate(&self) -> impl Iterator<Item = (PieceType, u8)> + '_ {
+        Self::PTS.iter().map(move |&pt| (pt, self.count(pt)))
     }
 
     fn empty() -> Self {
